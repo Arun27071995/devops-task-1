@@ -1,0 +1,32 @@
+name: CI/CD Pipeline - Node.js Docker App
+
+on:
+  push:
+    branches:
+      - main   # jab main branch par push hoga tab ye run karega
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout repo
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Login to Docker Hub
+    - name: Docker Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Step 3: Build Docker Image
+    - name: Build Docker Image
+      run: |
+        docker build -t arun17071998/nodejs-demo-app:latest .
+
+    # Step 4: Push Docker Image
+    - name: Push Docker Image
+      run: |
+        docker push arun17071998/nodejs-demo-app:latest
